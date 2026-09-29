@@ -1,0 +1,42 @@
+name: Build and deploy Initializr
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Build browser site from source
+        run: sh build-site.sh
+      - name: Check browser JavaScript
+        run: |
+          node --check site/engine.js
+          node --check site/zip.js
+          node --check site/app.js
+      - name: Test browser generation
+        run: |
+          node tests/browser-generator.cjs
+          python -c "import glob,zipfile; [(_ for _ in ()).throw(Exception(p)) for p in glob.glob('build/browser-zips/*.zip') if zipfile.ZipFile(p).testzip() is not None]"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,13 +1,17 @@
+# Browser deployment (4.1)
+
+Browser-only generation and automatic GitHub Pages deployment are now included.
+After Pages is enabled with Source = GitHub Actions, every push to main triggers build/test/deploy.
+Expected URL after successful deployment: https://techshakti55.github.io/technotes-initializr/
+An open tab offers a reload button when a newer deployment is detected (checks every 60 seconds).
+See HOSTING.md for one-time setup and build details. Local Java usage remains available below.
+
 # TechNotes Initializr 4.0.0
 
 A local Java project generator enhanced from your Local Initializr V3 source.
 Requires **JDK 21**. No Docker, npm, external web assets or Maven installation is required to run the generator.
 
-## From GitHub source
-
-Clone this repository, install JDK 21, and run `build.cmd` on Windows (or `sh build.sh` on Linux/macOS) once to create the executable JAR. Then run `start.cmd`. The compiled JAR is not committed to source control.
-
-## Windows quick start (downloaded release bundle)
+## Windows quick start
 
 1. Extract this entire ZIP to `D:\TechNotes\tools\technotes-initializr`.
 2. Double-click `start.cmd`, or open PowerShell in the extracted folder and run:

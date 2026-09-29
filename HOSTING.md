@@ -28,3 +28,19 @@ Saved catalogs live in each user's browser, so there are no shared server catalo
 The generator does not contact Maven or execute submitted dependencies; it only creates text ZIP entries in memory.
 
 Before public release, test through the actual proxy: HTTPS, allowed host/origin, oversized requests, rate limits, ZIP download, and browser console. Review Java/runtime security updates regularly.
+
+## Browser-only GitHub Pages version (4.1)
+
+The repository also builds a static version with `sh build-site.sh` (JDK 21 at build time only).
+`src/ExportBrowser.java` exports the catalog and dependency templates from the Java generator.
+`browser/engine.js` validates inputs and generates source/configuration locally; `browser/zip.js` writes the ZIP in memory.
+No Java runtime or server is needed by the hosted browser version. Form values are not sent to a backend.
+
+One-time repository setup: Settings > Pages > Build and deployment > Source > GitHub Actions.
+Then `.github/workflows/pages.yml` builds and deploys on every push to main, or manually through Run workflow.
+Only changes merged/pushed to main deploy; local edits and unmerged feature branches do not.
+Failed builds leave the previous deployment in place. Check the Actions run before expecting an update.
+Already-open pages check deployment revision every 60 seconds and offer a reload button when changed.
+Refreshing loads the new deployed version; open forms are not auto-reloaded.
+Expected URL after the FIRST successful deployment: https://techshakti55.github.io/technotes-initializr/
+This URL must not be described as live until deployment succeeds.
